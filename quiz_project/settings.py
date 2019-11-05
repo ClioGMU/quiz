@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'quiz.apps.QuizConfig',
     'question.apps.QuestionConfig',
+    'response.apps.ResponseConfig',
+    'respondent.apps.RespondentConfig',
 ]
 
 MIDDLEWARE = [
