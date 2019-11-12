@@ -1,4 +1,4 @@
-#import uuid
+import uuid
 from django.db import models
 
 
@@ -6,7 +6,7 @@ class Quiz(models.Model):
     class Meta: 
         verbose_name = "Quiz"
         verbose_name_plural = "Quizzes"
-    #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=200)
     author = models.ForeignKey(
         'users.CustomUser',
@@ -41,6 +41,10 @@ class Respondent(models.Model):
         return self.name[:50]
 
 class QuizResponse(models.Model):
+    quiz = models.ForeignKey(
+        'Quiz',
+        on_delete=models.CASCADE,
+    )
     respondent = models.ForeignKey(
         'Respondent',
         on_delete=models.CASCADE,
