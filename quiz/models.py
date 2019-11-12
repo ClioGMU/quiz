@@ -19,3 +19,47 @@ class Quiz(models.Model):
 
     def __str__(self):
         return self.title
+
+class Question(models.Model):
+    quiz = models.ForeignKey(
+        'Quiz',
+        on_delete=models.CASCADE,
+    )
+    question_text = models.TextField(max_length=2000)
+    notes_for_question = models.TextField(max_length=2000, blank=True)
+    
+
+    def __str__(self):
+        return self.question_text[:50]
+
+class Respondent(models.Model):
+    id_number = models.IntegerField()
+    name = models.CharField(max_length=100)
+
+
+    def __str__(self):
+        return self.name[:50]
+
+class QuizResponse(models.Model):
+    respondent = models.ForeignKey(
+        'Respondent',
+        on_delete=models.CASCADE,
+    )
+    attempt_date = models.DateField(auto_now=True)
+
+    def __str__(self):
+        return self.respondent[:50]
+
+class QuestionResponse(models.Model):
+    quiz_response = models.ForeignKey(
+        'QuizResponse',
+        on_delete=models.CASCADE,
+    )
+    question = models.ForeignKey(
+        'Question',
+        on_delete=models.CASCADE,
+    )
+    response_text = models.TextField(max_length=2000)
+
+    def __str__(self):
+        return self.response_text[:50]

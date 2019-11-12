@@ -1,12 +1,6 @@
-#import uuid
 from django.db import models
 
 class Question(models.Model):
-    #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    author = models.ForeignKey(
-        'users.CustomUser',
-        on_delete=models.CASCADE,
-    )
     quiz = models.ForeignKey(
         'quiz.Quiz',
         on_delete=models.CASCADE,
