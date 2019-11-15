@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Quizzes{% endblock title %}
+
+{% block content %}
+{% for quiz in object_list %}
+<div class="card">
+    <div class="card-header">
+        <h2><a href="">{{ quiz.title }}</a></h2>
+        <p>{{ quiz.date_created }}</p>
+        <p>{{ quiz.directions_and_introductory_text|truncatewords:50 }}</p>
+        <p>{{ quiz.primary_source_text|truncatewords:50 }}</p>
+    </div>
+    <div class="card-footer text-center text-muted">
+        <a href="#">Edit</a> | <a href="#">Delete</a> | <a href="#">Copy</a>
+    </div>
+</div>
+<br />
+{% endfor %}
+{% endblock content %}
