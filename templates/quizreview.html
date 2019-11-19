@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ article.title }}
+{% endblock title %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2><a href="">{{ quiz.title }}</a></h2>
+        <p>{{ quiz.date_created }}</p>
+        <p>{{ quiz.directions_and_introductory_text }}</p>
+        <p>{{ quiz.primary_source_text }}</p>
+    </div>
+
+
+{% endblock content %}
