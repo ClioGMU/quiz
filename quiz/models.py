@@ -22,7 +22,7 @@ class Quiz(models.Model):
 
 class Question(models.Model):
     quiz = models.ForeignKey(
-        'Quiz',
+        Quiz,
         on_delete=models.CASCADE,
     )
     question_text = models.TextField(max_length=2000)
@@ -42,25 +42,25 @@ class Respondent(models.Model):
 
 class QuizResponse(models.Model):
     quiz = models.ForeignKey(
-        'Quiz',
+        Quiz,
         on_delete=models.CASCADE,
     )
     respondent = models.ForeignKey(
-        'Respondent',
+        Respondent,
         on_delete=models.CASCADE,
     )
     attempt_date = models.DateField(auto_now=True)
 
     def __str__(self):
-        return self.respondent[:50]
+        return self.respondent.name + " on " + self.quiz.title
 
 class QuestionResponse(models.Model):
     quiz_response = models.ForeignKey(
-        'QuizResponse',
+        QuizResponse,
         on_delete=models.CASCADE,
     )
     question = models.ForeignKey(
-        'Question',
+        Question,
         on_delete=models.CASCADE,
     )
     response_text = models.TextField(max_length=2000)
