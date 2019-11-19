@@ -6,3 +6,6 @@ class QuizListView(LoginRequiredMixin, ListView):
     model = Quiz
     template_name = 'dashboard.html'
     ordering = ['-date_created']
+
+    def get_queryset(self):
+        return super().get_queryset().filter(author = self.request.user)
