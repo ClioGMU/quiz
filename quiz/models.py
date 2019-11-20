@@ -30,7 +30,7 @@ class Question(models.Model):
     
 
     def __str__(self):
-        return self.question_text[:50]
+        return self.quiz.title[:50] + ": " + self.question_text[:50]
 
 class Respondent(models.Model):
     id_number = models.IntegerField()
@@ -52,7 +52,7 @@ class QuizResponse(models.Model):
     attempt_date = models.DateField(auto_now=True)
 
     def __str__(self):
-        return self.respondent.name + " on " + self.quiz.title
+        return self.quiz.title[:50] + ": " + self.respondent.name
 
 class QuestionResponse(models.Model):
     quiz_response = models.ForeignKey(
@@ -64,6 +64,6 @@ class QuestionResponse(models.Model):
         on_delete=models.CASCADE,
     )
     response_text = models.TextField(max_length=2000)
-
+ 
     def __str__(self):
-        return self.response_text[:50]
+        return self.quiz_response.quiz.title[:50] + ": " + self.quiz_response.respondent.name + " on " + self.question.question_text[:50]
