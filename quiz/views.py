@@ -16,3 +16,6 @@ class QuizReviewView(LoginRequiredMixin, DetailView):
     template_name = 'quizreview.html'
     ordering = ['-date_created']
 
+    def get_queryset(self):
+        return super().get_queryset().filter(author = self.request.user)
+
