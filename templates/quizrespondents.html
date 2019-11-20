@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ quiz.title }}
+{% endblock title %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2><a href="{% url 'quizreview' quiz.pk %}">{{ quiz.title }}</a></h2>
+        <p><a href="{% url 'quizresponses' quiz.pk %}">View by question instead</a></p>
+        <h3>Date created:</h3>
+        <p>{{ quiz.date_created }}</p>
+        <h3>Directions and introductory text:</h3>
+        <p>{{ quiz.directions_and_introductory_text }}</p>
+        <h3>Primary source text:</h3>
+        <p>{{ quiz.primary_source_text }}</p>
+    </div>
+    <div>
+        <h3>Number of questions: {{ quiz.question_set.count }}</h3>
+        <h3>Number of responses: {{ quiz.quizresponse_set.count }}</h3>
+        <h3>Responses:</h3>
+        <ol>
+        {% for respondent in quiz.quizresponse_set.all %}
+            <li><h4>{{ respondent.respondent.name }} | {{ respondent.respondent.id_number }} | {{ respondent.attempt_date }}</h4></li>
+                <br>
+                <ol>
+                {% for response in respondent.questionresponse_set.all %}
+                    <li>{{ response.question.question_text }}<br><br>{{ response.response_text }}<br><br></li>
+                {% endfor %}
+                </ol>
+        {% endfor %}
+        </ol>
+    </div>
+
+    
+
+
+{% endblock content %}

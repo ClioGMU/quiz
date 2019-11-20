@@ -11,6 +11,7 @@
         <p>{{ quiz.directions_and_introductory_text|truncatewords:50 }}</p>
         <p>{{ quiz.primary_source_text|truncatewords:50 }}</p>
         <p>{{ quiz.id }}</p>
+        <p><a href="{% url 'quizresponses' quiz.pk %}">View {{ quiz.quizresponse_set.count }} responses</a></p>
     </div>
     <div class="card-footer text-center text-muted">
         <a href="#">Edit</a> | <a href="#">Delete</a> | <a href="#">Copy</a>

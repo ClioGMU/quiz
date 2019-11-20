@@ -25,3 +25,9 @@ class QuizResponsesView(LoginRequiredMixin, DetailView):
     def get_queryset(self):
         return super().get_queryset().filter(author = self.request.user)
 
+class QuizResponsesByRespondentView(LoginRequiredMixin, DetailView):
+    model = Quiz
+    template_name = 'quizrespondents.html'
+
+    def get_queryset(self):
+        return super().get_queryset().filter(author = self.request.user)

@@ -8,6 +8,7 @@
 <div class="card">
     <div class="card-header">
         <h2>{{ quiz.title }}</h2>
+        <p><a href="{% url 'quizresponses' quiz.pk %}">View {{ quiz.quizresponse_set.count }} responses</a></p>
         <h3>Date created:</h3>
         <p>{{ quiz.date_created }}</p>
         <h3>Directions and introductory text:</h3>
