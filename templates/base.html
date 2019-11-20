@@ -6,6 +6,13 @@
         <header>
             <h1>Quiz App</h1>
         </header>
+        <div class="card-body">
+                {% if user.is_authenticated %}
+                <p>Hi {{ user.username }}! | <a href="{% url 'dashboard' %}">View your quizzes</a> | <a href="{% url 'logout' %}">Log out</a></p>
+                {% else %}
+                <p><a href="{% url 'login' %}">Log in</a> or <a href="{% url 'signup' %}">sign up</a> to create and view your quizzes</p>
+                {% endif %}
+        </div>  
         <div>
             {% block content %}
             {% endblock content %}
