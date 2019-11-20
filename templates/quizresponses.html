@@ -17,19 +17,25 @@
     </div>
     <div>
         <h3>Number of questions: {{ quiz.question_set.count }}</h3>
+        <h3>Number of responses: {{ quiz.quizresponse_set.count }}</h3>
 
         {% for question in quiz.question_set.all %}
             <h3>Question {{ forloop.counter }}</h3>
             <h4>Question text:</h4>
             <p>{{ question.question_text }}</p>
-            <h4>Notes for question (only visible to you):</h4>
+            <h4>Notes for question:</h4>
             <p>{{ question.notes_for_question }}</p>
+            <h4>Responses:</h4>
+            <ol>
+                {% for questionresponse in question.questionresponse_set.all %}
+                <li>{{ questionresponse.quiz_response.respondent.name }} | {{ questionresponse.quiz_response.respondent.id_number }} | {{ questionresponse.quiz_response.attempt_date }} <br>
+                    {{ questionresponse.response_text }}</li><br>
+                {% endfor %}
+            </ol>
         {% endfor %}
-    </div>
-    <div>
-        <h3>Message (seen upon submission of responses):</h3>
-        <p>{{ quiz.message }}</p>
     </div>
 
     
+
+
 {% endblock content %}
