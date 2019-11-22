@@ -3,6 +3,8 @@ from django.views.generic.edit import CreateView
 from .models import Quiz, QuizResponse
 from .forms import QuestionFormSet
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render
+from django.http import Http404
 
 class QuizListView(LoginRequiredMixin, ListView):
     model = Quiz
@@ -59,8 +61,13 @@ class QuizCreateView(LoginRequiredMixin, CreateView):
         else:
             return super().form_invalid(form)
 
-class QuizTakeView(CreateView):
-    model = QuizResponse
-    template_name = 'takequiz.html'
-    fields = ['respondent']
-    
+def take_quiz(request, quiz_id):
+    if request.method == "GET":
+        try:
+            quiz = Quiz.objects.get(pk=quiz_id)
+        except Quiz.DoesNotExist:
+            raise Http404("Bad URL to Quiz.")
+        return render(request, 'takequiz.html', {'quiz': quiz})
+    elif request.method == "POST":
+        pass
+        # Do something

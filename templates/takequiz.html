@@ -5,5 +5,15 @@
 {% endblock nav %}
 
 {% block content %}
-<p>Taking my quiz</p>
+
+<h1>{{ quiz.title }}</h1>
+<h3>Directions and introductory text:</h3>
+<p>{{ quiz.directions_and_introductory_text }}</p>
+<h3>Primary source text:</h3>
+<p>{{ quiz.primary_source_text }}</p>
+{% for question in quiz.question_set.all %}
+    <h3>Question {{ forloop.counter }}</h3>
+    <p>{{ question.question_text }}</p>
+{% endfor %}
+
 {% endblock content %}
