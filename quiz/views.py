@@ -1,6 +1,6 @@
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView
-from .models import Quiz
+from .models import Quiz, QuizResponse
 from .forms import QuestionFormSet
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -58,3 +58,9 @@ class QuizCreateView(LoginRequiredMixin, CreateView):
             return response
         else:
             return super().form_invalid(form)
+
+class QuizTakeView(CreateView):
+    model = QuizResponse
+    template_name = 'takequiz.html'
+    fields = ['respondent']
+    
