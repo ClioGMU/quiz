@@ -1,5 +1,7 @@
 from django.views.generic import ListView, DetailView
+from django.views.generic.edit import CreateView
 from .models import Quiz
+from .forms import QuestionFormSet
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 class QuizListView(LoginRequiredMixin, ListView):
@@ -31,3 +33,28 @@ class QuizResponsesByRespondentView(LoginRequiredMixin, DetailView):
 
     def get_queryset(self):
         return super().get_queryset().filter(author = self.request.user)
+
+class QuizCreateView(LoginRequiredMixin, CreateView):
+    model = Quiz
+    template_name = 'createnew.html'
+    fields = ['title', 'directions_and_introductory_text', 'primary_source_text', 'message']
+    
+    def get_context_data(self, **kwargs):
+        context = super(QuizCreateView, self).get_context_data(**kwargs)
+        if self.request.POST:
+            context["question_formset"] = QuestionFormSet(self.request.POST)
+        else:
+            context["question_formset"] = QuestionFormSet()
+        return context
+    
+    def form_valid(self, form):
+        context = self.get_context_data(form=form)
+        formset = context["question_formset"]
+        form.instance.author = self.request.user
+        if formset.is_valid():
+            response = super().form_valid(form)
+            formset.instance = self.object
+            formset.save()
+            return response
+        else:
+            return super().form_invalid(form)

@@ -1,5 +1,6 @@
 import uuid
 from django.db import models
+from django.urls import reverse
 
 
 class Quiz(models.Model):
@@ -19,6 +20,9 @@ class Quiz(models.Model):
 
     def __str__(self):
         return self.title
+    
+    def get_absolute_url(self):
+        return reverse('quizreview', args=[str(self.id)])
 
 class Question(models.Model):
     quiz = models.ForeignKey(
