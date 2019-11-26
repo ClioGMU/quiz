@@ -36,6 +36,10 @@ class QuizResponsesByRespondentView(LoginRequiredMixin, DetailView):
     def get_queryset(self):
         return super().get_queryset().filter(author = self.request.user)
 
+class QuizSubmittedView(DetailView):
+    model = Quiz
+    template_name = 'quizsubmitted.html'
+
 class QuizCreateView(LoginRequiredMixin, CreateView):
     model = Quiz
     template_name = 'createnew.html'
