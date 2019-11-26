@@ -29,7 +29,7 @@
             <h4>Responses:</h4>
             <ol>
                 {% for questionresponse in question.questionresponse_set.all %}
-                <li>{{ questionresponse.quiz_response.respondent.name }} | {{ questionresponse.quiz_response.respondent.id_number }} | {{ questionresponse.quiz_response.attempt_date }} <br>
+                <li>{{ questionresponse.quiz_response.name }} | {{ questionresponse.quiz_response.id_number }} | {{ questionresponse.quiz_response.attempt_date }} <br>
                     {{ questionresponse.response_text }}</li><br>
                 {% endfor %}
             </ol>

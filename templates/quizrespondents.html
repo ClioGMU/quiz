@@ -22,7 +22,7 @@
         <h3>Responses:</h3>
         <ol>
         {% for respondent in quiz.quizresponse_set.all %}
-            <li><h4>{{ respondent.respondent.name }} | {{ respondent.respondent.id_number }} | {{ respondent.attempt_date }}</h4></li>
+            <li><h4>{{ respondent.name }} | {{ respondent.id_number }} | {{ respondent.attempt_date }}</h4></li>
                 <br>
                 <ol>
                 {% for response in respondent.questionresponse_set.all %}
