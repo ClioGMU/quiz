@@ -47,6 +47,9 @@ class QuizResponse(models.Model):
 
     def __str__(self):
         return self.quiz.title[:50] + ": " + self.name
+    
+    def get_absolute_url(self):
+        return reverse('quizsubmitted', args=[str(self.quiz_id)])
 
 class QuestionResponse(models.Model):
     quiz_response = models.ForeignKey(
