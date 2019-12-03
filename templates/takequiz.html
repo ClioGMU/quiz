@@ -11,14 +11,9 @@
 <p>{{ quiz.directions_and_introductory_text }}</p>
 <h3>Primary source text:</h3>
 <p>{{ quiz.primary_source_text }}</p>
-<form action="" method="post">{% csrf_token %}
-    {{ form.as_p }}
+<form action="{% url 'quiztake' quiz_id=quiz.id %}" method="post">
+    {% csrf_token %}
+    {{ quiz_response_form.as_p }}
     <input type="submit" value="Save" />
 </form>
-{% for question in quiz.question_set.all %}
-    <h3>Question {{ forloop.counter }}</h3>
-    <p>{{ question.question_text }}</p>
-{% endfor %}
-<input type="submit" value="Submit My Quiz" />
-
 {% endblock content %}

@@ -1,7 +1,7 @@
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView
 from .models import Quiz, QuizResponse, QuestionResponse
-from .forms import QuestionFormSet, QuizForm
+from .forms import QuestionFormSet, QuizResponseForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.http import Http404, HttpResponseRedirect
@@ -68,40 +68,29 @@ class QuizCreateView(LoginRequiredMixin, CreateView):
             return super().form_invalid(form)
 
 def take_quiz(request, quiz_id):
-    #form = QuizForm()
-    #quiz = Quiz.objects.get(pk=quiz_id)
     if request.method == "GET":
-        form = QuizForm(request.POST)
+        quiz_response_form = QuizResponseForm()
         quiz = Quiz.objects.get(pk=quiz_id)
         try:
             quiz = Quiz.objects.get(pk=quiz_id)
         except Quiz.DoesNotExist:
             raise Http404("Bad URL to Quiz.")
-        return render(request, 'takequiz.html', {'quiz': quiz, 'form': form})
+        return render(request, 'takequiz.html', {'quiz': quiz, 'quiz_response_form': quiz_response_form})
+    
     elif request.method == "POST":
-        form = QuizForm()
-        quiz = Quiz.objects.get(pk=quiz_id)
-        if form.is_valid():
-            obj = QuizResponse()
-            obj.name = form.cleaned_data['name']
-            obj.id_number = form.cleaned_data['id_number']
-            obj.quiz = quiz
-            obj.save()
+        quiz_response_form = QuizResponseForm(request.POST)
 
-            #response = super().form_valid(form)
-            #forms.instance = self.object
-            #form.save()
-            #form.process()
-            #name = form.cleaned_data['name']
-            #id_number = form.cleaned_data['id_number']
-            #quiz = quiz_id
-        #context = {'form': form }
+        try:
+            quiz = Quiz.objects.get(pk=quiz_id)
+        except Quiz.DoesNotExist:
+            raise Http404("Bad URL to Quiz.")
+
+        if quiz_response_form.is_valid():
+            quiz_response = QuizResponse.objects.create(
+                quiz = quiz, 
+                id_number=quiz_response_form.cleaned_data['id_number'], 
+                name=quiz_response_form.cleaned_data['name']
+            )
+            quiz_response.save()
         
         return render(request, 'quizsubmitted.html', {'quiz': quiz})
-
-        #else:
-            #return render(request, 'takequiz.html', {'quiz': quiz, 'form': form})
-
-#return render(request, 'takequiz.html', {'quiz': quiz, 'form': form})
-#return render(request, 'quizsubmitted.html', {'quiz': quiz})
-#return HttpResponseRedirect(reverse('submitted/<uuid:pk>/'), )
