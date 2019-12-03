@@ -1,7 +1,8 @@
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView
 from .models import Quiz, QuizResponse, QuestionResponse
-from .forms import QuestionFormSet, QuizResponseForm
+from django.forms.models import formset_factory
+from .forms import QuestionFormSet, QuizResponseForm, QuestionResponseForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.http import Http404, HttpResponseRedirect
@@ -69,13 +70,20 @@ class QuizCreateView(LoginRequiredMixin, CreateView):
 
 def take_quiz(request, quiz_id):
     if request.method == "GET":
-        quiz_response_form = QuizResponseForm()
-        quiz = Quiz.objects.get(pk=quiz_id)
         try:
             quiz = Quiz.objects.get(pk=quiz_id)
         except Quiz.DoesNotExist:
             raise Http404("Bad URL to Quiz.")
-        return render(request, 'takequiz.html', {'quiz': quiz, 'quiz_response_form': quiz_response_form})
+    
+        quiz_response_form = QuizResponseForm()
+
+        num_questions = quiz.question_set.count()
+        QuestionResponseFormset = formset_factory(QuestionResponseForm, extra=num_questions)
+        question_response_formset = QuestionResponseFormset()
+
+        return render(request, 'takequiz.html', {'quiz': quiz, 
+                                                 'quiz_response_form': quiz_response_form,
+                                                 'question_response_formset': question_response_formset})
     
     elif request.method == "POST":
         quiz_response_form = QuizResponseForm(request.POST)

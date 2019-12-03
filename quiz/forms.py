@@ -1,5 +1,5 @@
 from django import forms
-from django.forms.models import inlineformset_factory
+from django.forms.models import inlineformset_factory, formset_factory
 from .models import Quiz, Question, QuizResponse, QuestionResponse
 
 QuestionFormSet = inlineformset_factory(
@@ -9,3 +9,6 @@ QuestionFormSet = inlineformset_factory(
 class QuizResponseForm(forms.Form):
     id_number = forms.IntegerField(label='ID number')
     name = forms.CharField(label='Your name', max_length=100)
+
+class QuestionResponseForm(forms.Form):
+    response_text = forms.CharField(label="Response", max_length=100)

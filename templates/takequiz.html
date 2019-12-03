@@ -11,9 +11,14 @@
 <p>{{ quiz.directions_and_introductory_text }}</p>
 <h3>Primary source text:</h3>
 <p>{{ quiz.primary_source_text }}</p>
+
 <form action="{% url 'quiztake' quiz_id=quiz.id %}" method="post">
     {% csrf_token %}
     {{ quiz_response_form.as_p }}
-    <input type="submit" value="Save" />
+    {{ question_response_formset.management_form }}
+    {% for form in question_response_formset %}
+    {{ form.as_p }}
+    {% endfor %}
+<input type="submit" value="Save" />
 </form>
 {% endblock content %}
