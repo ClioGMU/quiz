@@ -11,4 +11,4 @@ class QuizResponseForm(forms.Form):
     name = forms.CharField(label='Your name', max_length=100)
 
 class QuestionResponseForm(forms.Form):
-    response_text = forms.CharField(label="Response", max_length=100)
+    response_text = forms.CharField(widget=forms.Textarea, label='Response', max_length=2000)
