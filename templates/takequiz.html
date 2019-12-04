@@ -15,10 +15,6 @@
 <form action="{% url 'quiztake' quiz_id=quiz.id %}" method="post">
     {% csrf_token %}
     {{ quiz_response_form.as_p }}
-    {% for question in quiz.question_set.all %}
-    <h3>Question {{ forloop.counter }}</h3>
-    <p>{{ question.question_text }}</p>
-    {% endfor %}
     {{ question_response_formset.management_form }}
     {% for form in question_response_formset %}
     <h3>Response to Question {{ forloop.counter }}</h3>

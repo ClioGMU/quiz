@@ -74,12 +74,12 @@ def take_quiz(request, quiz_id):
             quiz = Quiz.objects.get(pk=quiz_id)
         except Quiz.DoesNotExist:
             raise Http404("Bad URL to Quiz.")
-    
+
         quiz_response_form = QuizResponseForm()
 
         num_questions = quiz.question_set.count()
         QuestionResponseFormset = formset_factory(QuestionResponseForm, extra=num_questions)
-        question_response_formset = QuestionResponseFormset()
+        question_response_formset = QuestionResponseFormset(request.GET or None)
 
         return render(request, 'takequiz.html', {'quiz': quiz, 
                                                  'quiz_response_form': quiz_response_form,
@@ -92,13 +92,24 @@ def take_quiz(request, quiz_id):
             quiz = Quiz.objects.get(pk=quiz_id)
         except Quiz.DoesNotExist:
             raise Http404("Bad URL to Quiz.")
+        
+        num_questions = quiz.question_set.count()
+        QuestionResponseFormset = formset_factory(QuestionResponseForm, extra=num_questions)
+        question_response_formset = QuestionResponseFormset(request.POST)
 
-        if quiz_response_form.is_valid():
+        if quiz_response_form.is_valid() and question_response_formset.is_valid():
             quiz_response = QuizResponse.objects.create(
                 quiz = quiz, 
                 id_number=quiz_response_form.cleaned_data['id_number'], 
                 name=quiz_response_form.cleaned_data['name']
             )
             quiz_response.save()
+            for counter, response in enumerate(question_response_formset):
+                question_response = QuestionResponse.objects.create(
+                quiz_response = quiz_response, 
+                question = quiz.question_set.filter()[counter],
+                response_text = response.cleaned_data['response_text']
+                )
+                question_response.save()
         
         return render(request, 'quizsubmitted.html', {'quiz': quiz})
