@@ -1,7 +1,15 @@
 {% extends 'base.html' %}
 
 {% block nav %}
-<p>User only nav</p>
+    {% if user.is_authenticated %}
+        <p>Hi {{ user.username }}! | <a href="{% url 'dashboard' %}">View your quizzes</a> | <a href="{% url 'createnew' %}">+ New quiz</a> | <a href="{% url 'logout' %}">Log out</a></p>
+    {% else %}
+    {% endif %}
+    {% endif %}
+    {% if quiz.author == request.user and request.user.is_authenticated %}
+        <p><a href="{% url 'quizresponses' quiz.pk %}">View {{ quiz.quizresponse_set.count }} responses</a></p>
+        <p><a href="{% url 'quizreview' quiz.pk %}">Review this quiz</a></p>
+    {% endif %}
 {% endblock nav %}
 
 {% block content %}

@@ -9,6 +9,8 @@
     <div class="card-header">
         <h2><a href="{% url 'quizreview' quiz.pk %}">{{ quiz.title }}</a></h2>
         <p><a href="{% url 'quizrespondents' quiz.pk %}">View by respondent instead</a></p>
+        <p><a href="{% url 'quiztake' quiz.pk %}">Link to take quiz</a></p>
+        <p>{% url 'quiztake' quiz.pk %}</p>
         <h3>Date created:</h3>
         <p>{{ quiz.date_created }}</p>
         <h3>Directions and introductory text:</h3>

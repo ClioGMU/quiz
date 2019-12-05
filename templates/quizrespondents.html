@@ -9,6 +9,8 @@
     <div class="card-header">
         <h2><a href="{% url 'quizreview' quiz.pk %}">{{ quiz.title }}</a></h2>
         <p><a href="{% url 'quizresponses' quiz.pk %}">View by question instead</a></p>
+        <p><a href="{% url 'quiztake' quiz.pk %}">Link to take quiz</a></p>
+        <p>{% url 'quiztake' quiz.pk %}</p>
         <h3>Date created:</h3>
         <p>{{ quiz.date_created }}</p>
         <h3>Directions and introductory text:</h3>
@@ -18,6 +20,13 @@
     </div>
     <div>
         <h3>Number of questions: {{ quiz.question_set.count }}</h3>
+        {% for question in quiz.question_set.all %}
+            <h3>Question {{ forloop.counter }}</h3>
+            <h4>Question text:</h4>
+            <p>{{ question.question_text }}</p>
+            <h4>Notes for question:</h4>
+            <p>{{ question.notes_for_question }}</p>
+        {% endfor %}
         <h3>Number of responses: {{ quiz.quizresponse_set.count }}</h3>
         <h3>Responses:</h3>
         <ol>

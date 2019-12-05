@@ -8,9 +8,12 @@
     <div class="card-header">
         <h2><a href="{% url 'quizreview' quiz.pk %}">{{ quiz.title }}</a></h2>
         <p>{{ quiz.date_created }}</p>
+        <h4>Directions and introductory text:</h4>
         <p>{{ quiz.directions_and_introductory_text|truncatewords:50 }}</p>
+        <h4>Primary source text:</h4>
         <p>{{ quiz.primary_source_text|truncatewords:50 }}</p>
-        <p>{{ quiz.id }}</p>
+        <p><a href="{% url 'quiztake' quiz.pk %}">Link to take quiz</a></p>
+        <p>{% url 'quiztake' quiz.pk %}</p>
         <p><a href="{% url 'quizresponses' quiz.pk %}">View {{ quiz.quizresponse_set.count }} responses</a></p>
     </div>
     <div class="card-footer text-center text-muted">
