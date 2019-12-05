@@ -3,8 +3,8 @@
 {% block nav %}
     {% if user.is_authenticated %}
         <p>Hi {{ user.username }}! | <a href="{% url 'dashboard' %}">View your quizzes</a> | <a href="{% url 'createnew' %}">+ New quiz</a> | <a href="{% url 'logout' %}">Log out</a></p>
+        <h3>Note! Responses will not be associated with your account or username</h3>
     {% else %}
-    {% endif %}
     {% endif %}
     {% if quiz.author == request.user and request.user.is_authenticated %}
         <p><a href="{% url 'quizresponses' quiz.pk %}">View {{ quiz.quizresponse_set.count }} responses</a></p>
@@ -15,7 +15,7 @@
 {% block content %}
 
 <div class="card-body">
-    <h3>Your responses have been submitted</h3>
+    <h2>Your responses have been submitted</h2>
     <p>{{ quiz.message }}</p>
 </div> 
 
