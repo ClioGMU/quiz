@@ -81,9 +81,13 @@ def take_quiz(request, quiz_id):
         QuestionResponseFormset = formset_factory(QuestionResponseForm, extra=num_questions)
         question_response_formset = QuestionResponseFormset(request.GET or None)
 
+        questions = quiz.question_set.all()
+        questions_and_responses = zip(question_response_formset.forms, questions)
+
         return render(request, 'takequiz.html', {'quiz': quiz, 
                                                  'quiz_response_form': quiz_response_form,
-                                                 'question_response_formset': question_response_formset})
+                                                 'question_response_formset': question_response_formset,
+                                                 'questions_and_responses': questions_and_responses})
     
     elif request.method == "POST":
         quiz_response_form = QuizResponseForm(request.POST)
@@ -104,10 +108,10 @@ def take_quiz(request, quiz_id):
                 name=quiz_response_form.cleaned_data['name']
             )
             quiz_response.save()
-            for counter, response in enumerate(question_response_formset):
+            for index, response in enumerate(question_response_formset):
                 question_response = QuestionResponse.objects.create(
                 quiz_response = quiz_response, 
-                question = quiz.question_set.filter()[counter],
+                question = quiz.question_set.filter()[index],
                 response_text = response.cleaned_data['response_text']
                 )
                 question_response.save()
