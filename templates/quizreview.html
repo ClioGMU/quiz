@@ -16,7 +16,7 @@
         <div class="card-footer text-center text-muted">
             <a href="{% url 'quizedit' quiz.pk %}">Edit</a> | <a href="{% url 'quizdelete' quiz.pk %}">Delete</a> | <a href="#">Copy</a>
         </div>
-        <h3>Date created:</h3>
+        <h3>Last updated:</h3>
         <p>{{ quiz.date_created }}</p>
         <h3>Directions and introductory text:</h3>
         <p>{{ quiz.directions_and_introductory_text }}</p>

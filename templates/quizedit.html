@@ -1,8 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h1>Edit quiz</h1>
+    <h2>Editing "<a href="{% url 'quizreview' quiz.pk %}">{{ quiz.title }}</a>"</h2>
+    {% if quiz.quizresponse_set.count == 0 %}
+        <h3>No responses have been submitted yet.</h3>
+    {% elif quiz.quizresponse_set.count == 1 %}
+        <h3>There is already <a href="{% url 'quizresponses' quiz.pk %}">1 response</a>. Are you sure you want to make changes anyway?</h3>
+    {% else %}
+        <h3>There are already <a href="{% url 'quizresponses' quiz.pk %}">{{ quiz.quizresponse_set.count }} responses</a>. Are you sure you want to make changes anyway?</h3>
+    {% endif %}
     <form action="" method="post">{% csrf_token %}
         {{ form.as_p }}
+        <p>Add some questions:</p>
+        {{ question_formset.as_p }}
     <input type="submit" value="Update" />
 </form>
 {% endblock content %}
