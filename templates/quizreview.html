@@ -8,9 +8,18 @@
 <div class="card">
     <div class="card-header">
         <h2>{{ quiz.title }}</h2>
-        <p><a href="{% url 'quizresponses' quiz.pk %}">View {{ quiz.quizresponse_set.count }} responses</a></p>
         <p><a href="{% url 'quiztake' quiz.pk %}">Link to take quiz</a></p>
         <p>{% url 'quiztake' quiz.pk %}</p>
+        {% if quiz.quizresponse_set.count == 1 %}
+            <p><a href="{% url 'quizresponses' quiz.pk %}">View 1 response</a></p>
+        {% elif quiz.quizresponse_set.count == 0 %}
+            <p>No responses have been submitted yet.</p>
+        {% else %}
+            <p><a href="{% url 'quizresponses' quiz.pk %}">View {{ quiz.quizresponse_set.count }} responses</a></p>
+        {% endif %}
+        <div class="card-footer text-center text-muted">
+            <a href="#">Edit</a> | <a href="{% url 'quizdelete' quiz.pk %}">Delete</a> | <a href="#">Copy</a>
+        </div>
         <h3>Date created:</h3>
         <p>{{ quiz.date_created }}</p>
         <h3>Directions and introductory text:</h3>

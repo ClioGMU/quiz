@@ -1,5 +1,5 @@
 from django.views.generic import ListView, DetailView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, DeleteView
 from .models import Quiz, QuizResponse, QuestionResponse
 from django.forms.models import formset_factory
 from .forms import QuestionFormSet, QuizResponseForm, QuestionResponseForm
@@ -67,6 +67,11 @@ class QuizCreateView(LoginRequiredMixin, CreateView):
             return response
         else:
             return super().form_invalid(form)
+
+class QuizDeleteView(LoginRequiredMixin, DeleteView):
+    model = Quiz
+    template_name = 'quizdelete.html'
+    success_url = reverse_lazy('dashboard')
 
 def take_quiz(request, quiz_id):
     if request.method == "GET":

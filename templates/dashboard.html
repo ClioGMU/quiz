@@ -14,10 +14,16 @@
         <p>{{ quiz.primary_source_text|truncatewords:50 }}</p>
         <p><a href="{% url 'quiztake' quiz.pk %}">Link to take quiz</a></p>
         <p>{% url 'quiztake' quiz.pk %}</p>
-        <p><a href="{% url 'quizresponses' quiz.pk %}">View {{ quiz.quizresponse_set.count }} responses</a></p>
+        {% if quiz.quizresponse_set.count == 1 %}
+            <p><a href="{% url 'quizresponses' quiz.pk %}">View 1 response</a></p>
+        {% elif quiz.quizresponse_set.count == 0 %}
+            <p>No responses have been submitted yet.</p>
+        {% else %}
+            <p><a href="{% url 'quizresponses' quiz.pk %}">View {{ quiz.quizresponse_set.count }} responses</a></p>
+        {% endif %}
     </div>
     <div class="card-footer text-center text-muted">
-        <a href="#">Edit</a> | <a href="#">Delete</a> | <a href="#">Copy</a>
+        <a href="#">Edit</a> | <a href="{% url 'quizdelete' quiz.pk %}">Delete</a> | <a href="#">Copy</a>
     </div>
 </div>
 <br />
