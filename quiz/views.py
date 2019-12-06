@@ -1,5 +1,5 @@
 from django.views.generic import ListView, DetailView
-from django.views.generic.edit import CreateView, DeleteView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Quiz, QuizResponse, QuestionResponse
 from django.forms.models import formset_factory
 from .forms import QuestionFormSet, QuizResponseForm, QuestionResponseForm
@@ -68,10 +68,21 @@ class QuizCreateView(LoginRequiredMixin, CreateView):
         else:
             return super().form_invalid(form)
 
+class QuizEditView(LoginRequiredMixin, UpdateView):
+    model = Quiz
+    template_name = 'quizedit.html'
+    fields = ['title', 'directions_and_introductory_text', 'primary_source_text', 'message']
+
+    def get_queryset(self):
+        return super().get_queryset().filter(author = self.request.user)
+
 class QuizDeleteView(LoginRequiredMixin, DeleteView):
     model = Quiz
     template_name = 'quizdelete.html'
     success_url = reverse_lazy('dashboard')
+
+    def get_queryset(self):
+        return super().get_queryset().filter(author = self.request.user)
 
 def take_quiz(request, quiz_id):
     if request.method == "GET":

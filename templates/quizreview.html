@@ -1,9 +1,5 @@
 {% extends 'base.html' %}
 
-{% block title %}
-{{ quiz.title }}
-{% endblock title %}
-
 {% block content %}
 <div class="card">
     <div class="card-header">
@@ -18,7 +14,7 @@
             <p><a href="{% url 'quizresponses' quiz.pk %}">View {{ quiz.quizresponse_set.count }} responses</a></p>
         {% endif %}
         <div class="card-footer text-center text-muted">
-            <a href="#">Edit</a> | <a href="{% url 'quizdelete' quiz.pk %}">Delete</a> | <a href="#">Copy</a>
+            <a href="{% url 'quizedit' quiz.pk %}">Edit</a> | <a href="{% url 'quizdelete' quiz.pk %}">Delete</a> | <a href="#">Copy</a>
         </div>
         <h3>Date created:</h3>
         <p>{{ quiz.date_created }}</p>

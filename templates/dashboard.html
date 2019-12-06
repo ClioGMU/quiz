@@ -1,7 +1,5 @@
 {% extends 'base.html' %}
 
-{% block title %}Quizzes{% endblock title %}
-
 {% block content %}
 {% for quiz in object_list %}
 <div class="card">
@@ -23,7 +21,7 @@
         {% endif %}
     </div>
     <div class="card-footer text-center text-muted">
-        <a href="#">Edit</a> | <a href="{% url 'quizdelete' quiz.pk %}">Delete</a> | <a href="#">Copy</a>
+        <a href="{% url 'quizedit' quiz.pk %}">Edit</a> | <a href="{% url 'quizdelete' quiz.pk %}">Delete</a> | <a href="#">Copy</a>
     </div>
 </div>
 <br />
