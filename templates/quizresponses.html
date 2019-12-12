@@ -1,12 +1,19 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="card">
+<div class="card" style="width: 55em;margin:0 auto;">
     <div class="card-header">
         <h2><a href="{% url 'quizreview' quiz.pk %}">{{ quiz.title }}</a></h2>
+    </div>
+    <div class="card-body">
         <p><a href="{% url 'quizrespondents' quiz.pk %}">View by respondent instead</a></p>
         <p><a href="{% url 'quiztake' quiz.pk %}">Link to take quiz</a></p>
         <p>{% url 'quiztake' quiz.pk %}</p>
+    </div>
+</div>
+<br>
+<div class="card" style="width: 55em;margin:0 auto;">
+    <div class="card-body">
         <h3>Date created:</h3>
         <p>{{ quiz.date_created }}</p>
         <h3>Directions and introductory text:</h3>
@@ -14,25 +21,37 @@
         <h3>Primary source text:</h3>
         <p>{{ quiz.primary_source_text }}</p>
     </div>
-    <div>
+</div>
+<br>
+<div class="card" style="width: 55em;margin:0 auto;">
+    <div class="card-header">
         <h3>Number of questions: {{ quiz.question_set.count }}</h3>
         <h3>Number of responses: {{ quiz.quizresponse_set.count }}</h3>
-
-        {% for question in quiz.question_set.all %}
-            <h3>Question {{ forloop.counter }}</h3>
-            <h4>Question text:</h4>
-            <p>{{ question.question_text }}</p>
-            <h4>Notes for question:</h4>
-            <p>{{ question.notes_for_question }}</p>
-            <h4>Responses:</h4>
-            <ol>
-                {% for questionresponse in question.questionresponse_set.all %}
-                <li>{{ questionresponse.quiz_response.name }} | {{ questionresponse.quiz_response.id_number }} | {{ questionresponse.quiz_response.attempt_date }} <br>
-                    {{ questionresponse.response_text }}</li><br>
-                {% endfor %}
-            </ol>
-        {% endfor %}
     </div>
+</div>
+<br>
+        {% for question in quiz.question_set.all %}
+        <div class="card" style="width: 55em;margin:0 auto;">
+            <div class="card-header text-center">
+                <h3>Question {{ forloop.counter }}</h3>
+            </div>
+            <div class="card-body">
+                <h4>Question text:</h4>
+                <p>{{ question.question_text }}</p>
+                <h4>Notes for question:</h4>
+                <p>{{ question.notes_for_question }}</p>
+                <br>
+                <h4>Responses:</h4>
+                <ol>
+                    {% for questionresponse in question.questionresponse_set.all %}
+                    <li>{{ questionresponse.quiz_response.name }} | {{ questionresponse.quiz_response.id_number }} | {{ questionresponse.quiz_response.attempt_date }} <br>
+                        {{ questionresponse.response_text }}</li><br>
+                    {% endfor %}
+                </ol>
+            </div>
+        </div>
+        <br>
+        {% endfor %}
 
     
 

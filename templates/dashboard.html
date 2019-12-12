@@ -2,9 +2,11 @@
 
 {% block content %}
 {% for quiz in object_list %}
-<div class="card">
-    <div class="card-header">
+<div class="card" style="width: 35em;margin:0 auto;">
+    <div class="card-header" style="width: 35em;margin:0 auto;">
         <h2><a href="{% url 'quizreview' quiz.pk %}">{{ quiz.title }}</a></h2>
+    </div>
+    <div class="card-body" style="width: 35em;margin:0 auto;">  
         <p>{{ quiz.date_created }}</p>
         <h4>Directions and introductory text:</h4>
         <p>{{ quiz.directions_and_introductory_text|truncatewords:50 }}</p>
@@ -20,10 +22,10 @@
             <p><a href="{% url 'quizresponses' quiz.pk %}">View {{ quiz.quizresponse_set.count }} responses</a></p>
         {% endif %}
     </div>
-    <div class="card-footer text-center text-muted">
-        <a href="{% url 'quizedit' quiz.pk %}">Edit</a> | <a href="{% url 'quizdelete' quiz.pk %}">Delete</a> | <a href="#">Copy</a>
+    <div class="card-footer text-center text-muted" style="width: 35em;margin:0 auto;">
+        <a href="{% url 'quizedit' quiz.pk %}">Edit</a> | <a href="{% url 'quizdelete' quiz.pk %}">Delete</a>
     </div>
 </div>
-<br />
+<br>
 {% endfor %}
 {% endblock content %}
