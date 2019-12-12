@@ -6,7 +6,11 @@
         <h3>Note! Responses will not be associated with your account or username</h3>
     {% endif %}
     {% if quiz.author == request.user and request.user.is_authenticated %}
-        <p><a href="{% url 'quizresponses' quiz.pk %}">View {{ quiz.quizresponse_set.count }} responses</a></p>
+        {% if quiz.quizresponse_set.count == 1 %}
+            <p><a href="{% url 'quizresponses' quiz.pk %}">View 1 response</a></p>
+        {% else %}
+            <p><a href="{% url 'quizresponses' quiz.pk %}">View {{ quiz.quizresponse_set.count }} responses</a></p>
+        {% endif %}
         <p><a href="{% url 'quizreview' quiz.pk %}">Review this quiz</a></p>
     {% endif %}
 {% endblock nav %}

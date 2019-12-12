@@ -7,6 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
+from django.db import IntegrityError, transaction
 
 
 class QuizListView(LoginRequiredMixin, ListView):
@@ -48,6 +49,7 @@ class QuizCreateView(LoginRequiredMixin, CreateView):
     template_name = 'createnew.html'
     fields = ['title', 'directions_and_introductory_text', 'primary_source_text', 'message']
     
+    @transaction.atomic
     def get_context_data(self, **kwargs):
         context = super(QuizCreateView, self).get_context_data(**kwargs)
         if self.request.POST:
@@ -73,6 +75,7 @@ class QuizEditView(LoginRequiredMixin, UpdateView):
     template_name = 'quizedit.html'
     fields = ['title', 'directions_and_introductory_text', 'primary_source_text', 'message']
 
+    @transaction.atomic
     def get_context_data(self, **kwargs):
         context = super(QuizEditView, self).get_context_data(**kwargs)
         if self.request.POST:
@@ -104,44 +107,50 @@ class QuizDeleteView(LoginRequiredMixin, DeleteView):
     def get_queryset(self):
         return super().get_queryset().filter(author = self.request.user)
 
+@transaction.atomic
 def take_quiz(request, quiz_id):
     try:
-        quiz = Quiz.objects.get(pk=quiz_id)
-    except Quiz.DoesNotExist:
-        raise Http404("Bad URL to Quiz.")
+        with transaction.atomic():
+            try:
+                quiz = Quiz.objects.get(pk=quiz_id)
+            except Quiz.DoesNotExist:
+                raise Http404("Bad URL to Quiz.")
     
-    quiz_response_form = QuizResponseForm()
+            quiz_response_form = QuizResponseForm()
 
-    num_questions = quiz.question_set.count()
-    QuestionResponseFormset = formset_factory(QuestionResponseForm, extra=num_questions)
-    questions = quiz.question_set.all()
+            num_questions = quiz.question_set.count()
+            QuestionResponseFormset = formset_factory(QuestionResponseForm, extra=num_questions)
+            questions = quiz.question_set.all()
 
-    if request.method == "GET":
-        question_response_formset = QuestionResponseFormset(request.GET or None)
-        questions_and_responses = zip(question_response_formset.forms, questions)
+            if request.method == "GET":
+                question_response_formset = QuestionResponseFormset(request.GET or None)
+                questions_and_responses = zip(question_response_formset.forms, questions)
 
-        return render(request, 'takequiz.html', {'quiz': quiz, 
-                                                 'quiz_response_form': quiz_response_form,
-                                                 'question_response_formset': question_response_formset,
-                                                 'questions_and_responses': questions_and_responses})
+                return render(request, 'takequiz.html', {'quiz': quiz, 
+                                                        'quiz_response_form': quiz_response_form,
+                                                        'question_response_formset': question_response_formset,
+                                                        'questions_and_responses': questions_and_responses})
     
-    elif request.method == "POST":
-        quiz_response_form = QuizResponseForm(request.POST)
-        question_response_formset = QuestionResponseFormset(request.POST)
+            elif request.method == "POST":
+                quiz_response_form = QuizResponseForm(request.POST)
+                question_response_formset = QuestionResponseFormset(request.POST)
 
-        if quiz_response_form.is_valid() and question_response_formset.is_valid():
-            quiz_response = QuizResponse.objects.create(
-                quiz = quiz, 
-                id_number=quiz_response_form.cleaned_data['id_number'], 
-                name=quiz_response_form.cleaned_data['name']
-            )
-            quiz_response.save()
-            for index, response in enumerate(question_response_formset):
-                question_response = QuestionResponse.objects.create(
-                quiz_response = quiz_response, 
-                question = quiz.question_set.filter()[index],
-                response_text = response.cleaned_data['response_text']
-                )
-                question_response.save()
+                if quiz_response_form.is_valid() and question_response_formset.is_valid():
+                    quiz_response = QuizResponse.objects.create(
+                    quiz = quiz, 
+                    id_number=quiz_response_form.cleaned_data['id_number'], 
+                    name=quiz_response_form.cleaned_data['name']
+                    )
+                    quiz_response.save()
+                    for index, response in enumerate(question_response_formset):
+                        question_response = QuestionResponse.objects.create(
+                        quiz_response = quiz_response, 
+                        question = quiz.question_set.filter()[index],
+                        response_text = response.cleaned_data['response_text']
+                        )
+                        question_response.save()
         
-        return render(request, 'quizsubmitted.html', {'quiz': quiz})
+            return render(request, 'quizsubmitted.html', {'quiz': quiz})
+
+    except IntegrityError:
+        handle_exception()
