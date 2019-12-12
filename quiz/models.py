@@ -60,7 +60,7 @@ class QuestionResponse(models.Model):
         Question,
         on_delete=models.CASCADE,
     )
-    response_text = models.TextField(max_length=2000)
+    response_text = models.TextField(max_length=2000, null=True)
  
     def __str__(self):
         return self.quiz_response.quiz.title[:50] + ": " + self.quiz_response.name + " on " + self.question.question_text[:50]
