@@ -105,19 +105,19 @@ class QuizDeleteView(LoginRequiredMixin, DeleteView):
         return super().get_queryset().filter(author = self.request.user)
 
 def take_quiz(request, quiz_id):
+    try:
+        quiz = Quiz.objects.get(pk=quiz_id)
+    except Quiz.DoesNotExist:
+        raise Http404("Bad URL to Quiz.")
+    
+    quiz_response_form = QuizResponseForm()
+
+    num_questions = quiz.question_set.count()
+    QuestionResponseFormset = formset_factory(QuestionResponseForm, extra=num_questions)
+    questions = quiz.question_set.all()
+
     if request.method == "GET":
-        try:
-            quiz = Quiz.objects.get(pk=quiz_id)
-        except Quiz.DoesNotExist:
-            raise Http404("Bad URL to Quiz.")
-
-        quiz_response_form = QuizResponseForm()
-
-        num_questions = quiz.question_set.count()
-        QuestionResponseFormset = formset_factory(QuestionResponseForm, extra=num_questions)
         question_response_formset = QuestionResponseFormset(request.GET or None)
-
-        questions = quiz.question_set.all()
         questions_and_responses = zip(question_response_formset.forms, questions)
 
         return render(request, 'takequiz.html', {'quiz': quiz, 
@@ -127,14 +127,6 @@ def take_quiz(request, quiz_id):
     
     elif request.method == "POST":
         quiz_response_form = QuizResponseForm(request.POST)
-
-        try:
-            quiz = Quiz.objects.get(pk=quiz_id)
-        except Quiz.DoesNotExist:
-            raise Http404("Bad URL to Quiz.")
-        
-        num_questions = quiz.question_set.count()
-        QuestionResponseFormset = formset_factory(QuestionResponseForm, extra=num_questions)
         question_response_formset = QuestionResponseFormset(request.POST)
 
         if quiz_response_form.is_valid() and question_response_formset.is_valid():
