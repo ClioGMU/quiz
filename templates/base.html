@@ -17,21 +17,19 @@
         <link href="{% static 'css/base.css' %}" rel="stylesheet">
     </head>
     <body>
-        <div class="card">
-            {% block nav %}
-                <h1 class="card-title"><a href="{% url 'home' %}">Quiz App</a></h1>
-                {% if user.is_authenticated %}
-                <p class="card-text">Hi {{ user.username }}! | <a href="{% url 'dashboard' %}">View your quizzes</a> | <a href="{% url 'createnew' %}">+ New quiz</a> | <a href="{% url 'logout' %}">Log out</a></p>
-                {% else %}
-                <p class="card-text"><a href="{% url 'login' %}">Log in</a> or <a href="{% url 'signup' %}">sign up</a> to create and view your quizzes</p>
-                {% endif %}
-            {% endblock nav %}
-        </div> 
-        <br> 
-        <div>
-            {% block content %}
-            {% endblock content %}
-        </div>
+        {% block nav %}
+            <h1 class="card-title"><a href="{% url 'home' %}">Quiz App</a></h1>
+            {% if user.is_authenticated %}
+            <p class="card-text">Hi {{ user.username }}! | <a href="{% url 'dashboard' %}">View your quizzes</a> | <a href="{% url 'createnew' %}">+ New quiz</a> | <a href="{% url 'logout' %}">Log out</a></p>
+            {% else %}
+            <p class="card-text"><a href="{% url 'login' %}">Log in</a> or <a href="{% url 'signup' %}">sign up</a> to create and view your quizzes</p>
+            {% endif %}
+        {% endblock nav %} 
+    <br> 
+    <div>
+        {% block content %}
+        {% endblock content %}
+    </div>
     
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->

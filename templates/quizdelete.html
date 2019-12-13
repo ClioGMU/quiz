@@ -1,9 +1,18 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Delete quiz</h1>
+<div class="card" style="width: 45em;margin:0 auto;">
+    <div class="card-header">
+        <h1>Delete Quiz</h1>
+    </div>
+<br>
+    <div class="card-body text-center">
     <form action="" method="post">{% csrf_token %}
-        <h2>Are you sure you want to delete "<a href="{% url 'quizreview' quiz.pk %}">{{ quiz.title }}</a>"?</h2>
+        <h2>Are you sure you want to delete <br> "<a href="{% url 'quizreview' quiz.pk %}">{{ quiz.title }}</a>"?</h2>
+        <br>
+        <p>Last updated: {{ quiz.date_created }}</p>
+        <p>Number of questions: {{ quiz.question_set.count }}</p>
+        <br>
         {% if quiz.quizresponse_set.count == 0 %}
             <h3>No responses have been submitted yet.</h3>
         {% elif quiz.quizresponse_set.count == 1 %}
@@ -11,10 +20,13 @@
         {% else %}
             <h3>This will also delete <a href="{% url 'quizresponses' quiz.pk %}">{{ quiz.quizresponse_set.count }} responses</a>.</h3>
         {% endif %}
-        <h4>More details</h4>
-        <p>Last updated: {{ quiz.date_created }}</p>
-        <p>Number of questions: {{ quiz.question_set.count }}</p>
+        <br>
         <input type="submit" value="Confirm Deletion" />
+        <br>
+        <br>
         <p>This action cannot be undone.</p>
     </form>
+    </div>
+</div>
+<br>
 {% endblock content %}

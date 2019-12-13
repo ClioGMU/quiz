@@ -18,6 +18,9 @@ body {
 .card-header {
     justify-content: center;
 }
+.card-header h1{
+    text-align: center;
+}
 .card-header h2{
     text-align: center;
 }
