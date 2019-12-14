@@ -55,6 +55,7 @@
             <div class="card-header">
                 <h4>{{ forloop.counter }}. {{ respondent.name }} | {{ respondent.id_number }} | {{ respondent.attempt_date }}</h4>
             </div>
+            <br>
             <div class="card-body">    
                     <ol>
                     {% for response in respondent.questionresponse_set.all %}

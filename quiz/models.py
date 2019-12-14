@@ -29,7 +29,7 @@ class Question(models.Model):
         Quiz,
         on_delete=models.CASCADE,
     )
-    question_text = models.TextField(max_length=2000)
+    question_text = models.TextField(max_length=2000, blank=True)
     notes_for_question = models.TextField(max_length=2000, blank=True)
     
 
