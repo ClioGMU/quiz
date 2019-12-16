@@ -13,7 +13,7 @@ class Quiz(models.Model):
         'users.CustomUser',
         on_delete=models.CASCADE,
     )
-    date_created = models.DateField(auto_now=True)
+    date_created = models.DateTimeField(auto_now=True)
     directions_and_introductory_text = models.TextField(max_length=5000)
     primary_source_text = models.TextField(max_length=20000)
     message = models.TextField(max_length=2000, blank=True)
@@ -30,7 +30,7 @@ class Question(models.Model):
         on_delete=models.CASCADE,
     )
     question_text = models.TextField(max_length=2000, blank=True)
-    notes_for_question = models.TextField(max_length=2000, blank=True)
+    notes_for_question = models.TextField(max_length=6000, blank=True)
     
 
     def __str__(self):
@@ -43,7 +43,7 @@ class QuizResponse(models.Model):
     )
     id_number = models.IntegerField()
     name = models.CharField(max_length=100)
-    attempt_date = models.DateField(auto_now=True)
+    attempt_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.quiz.title[:50] + ": " + self.name
@@ -60,7 +60,7 @@ class QuestionResponse(models.Model):
         Question,
         on_delete=models.CASCADE,
     )
-    response_text = models.TextField(max_length=2000, null=True)
+    response_text = models.TextField(max_length=6000, null=True)
  
     def __str__(self):
         return self.quiz_response.quiz.title[:50] + ": " + self.quiz_response.name + " on " + self.question.question_text[:50]
