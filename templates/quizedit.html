@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="card" style="width: 55em;margin:0 auto;">
+    <div class="card-header">
+        <h1>Editing "<a href="{% url 'quizreview' quiz.pk %}">{{ quiz.title }}</a>"</h1>
+    </div>
+    <div class="card-body">
+        {% if quiz.quizresponse_set.count == 0 %}
+            <h3>No responses have been submitted yet.</h3>
+        {% elif quiz.quizresponse_set.count == 1 %}
+            <h3>There is already <a href="{% url 'quizresponses' quiz.pk %}">1 response</a>. Are you sure you want to make changes anyway?</h3>
+        {% else %}
+            <h3>There are already <a href="{% url 'quizresponses' quiz.pk %}">{{ quiz.quizresponse_set.count }} responses</a>. Are you sure you want to make changes anyway?</h3>
+        {% endif %}
+    </div>
+</div>
+<br>
+<div class="card" style="width: 55em;margin:0 auto;">
+    <div class="card-body">
+        <form action="" method="post">{% csrf_token %}
+            {% csrf_token %}
+            <h5>Fields marked * are required. Text in the "Message" field will be shown to respondents upon submission.</h5>
+            <br>
+            {{ form|crispy }}
+            <br>
+            <h4>Add desired number of questions</h4>
+            <h5>Notes are for your own use and will not be visible to respondents</h5>
+            <br>
+            {{ question_formset|crispy }}
+            <input type="submit" value="Update" />
+        </form>
+    </div>
+</div>
+<br>
+{% endblock content %}

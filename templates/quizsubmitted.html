@@ -1,14 +1,45 @@
 {% extends 'base.html' %}
 
 {% block nav %}
-<p>User only nav</p>
+    <h1 class="card-title"><a href="{% url 'home' %}">Quiz App</a></h1>
+    {% if user.is_authenticated %}
+        <div class="card-text">
+            <p>Hi {{ user.username }}! | <a href="{% url 'dashboard' %}">View your quizzes</a> | <a href="{% url 'createnew' %}">+ New quiz</a> | <a href="{% url 'logout' %}">Log out</a></p>
+        </div>
+    {% endif %} 
 {% endblock nav %}
 
 {% block content %}
 
-<div class="card-body">
-    <h3>Your responses have been submitted</h3>
-    <p>{{ quiz.message }}</p>
+<div class="card" style="width: 45em;margin:0 auto;">
+    <div class="card-header">
+        <h2>Your responses have been submitted</h2>
+    </div>
+    {% if quiz.message %}
+        <div class="card-body">
+            <p>{{ quiz.message }}</p>
+        </div>
+    {% endif %}
 </div> 
+<br>
+
+{% if user.is_authenticated %}
+    <div class="card" style="width: 45em;margin:0 auto;">
+        <div class="card-title">
+            <h3>Note! Responses will not be associated with your account or username</h3>
+        </div>
+{% endif %}
+    <div class="card-body text-center">
+        {% if quiz.author == request.user and request.user.is_authenticated %}
+            {% if quiz.quizresponse_set.count == 1 %}
+                <h4><a href="{% url 'quizresponses' quiz.pk %}">View 1 response</a> | <a href="{% url 'quizreview' quiz.pk %}">Review this quiz</a></h4>
+            {% else %}
+                <h4><a href="{% url 'quizresponses' quiz.pk %}">View {{ quiz.quizresponse_set.count }} responses</a>  | <a href="{% url 'quizreview' quiz.pk %}">Review this quiz</a></h4>
+            {% endif %}
+        </div>
+    </div>
+    <br>
+        {% endif %}
+
 
 {% endblock content %}
